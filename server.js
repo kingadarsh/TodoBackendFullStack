@@ -24,15 +24,15 @@ const app=express();
 // middleware
 app.use(express.json());
 app.use(cors());
+// app.use(cors({origin:true}));
+const corsOptions = {
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    optionsSuccessStatus: 204
+  };
 
-// const corsOptions = {
-//     origin: "*",
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-//     optionsSuccessStatus: 204
-//   };
-
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
   
   // Handle OPTIONS requests globally
 // app.options("*", cors(corsOptions));
