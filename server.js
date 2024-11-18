@@ -25,17 +25,17 @@ const app=express();
 app.use(express.json());
 app.use(cors());
 // app.use(cors({origin:true}));
-const corsOptions = {
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    optionsSuccessStatus: 204
-  };
+// const corsOptions = {
+//     origin: "*",
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+//     optionsSuccessStatus: 204
+//   };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
   
-// Handle OPTIONS requests globally
-app.options("*", cors(corsOptions));
+// // Handle OPTIONS requests globally
+// app.options("*", cors(corsOptions));
   
 app.use(express.static("public"));
 
@@ -67,6 +67,12 @@ app.post("/signup",async (req,res)=>{
 
 
 });
+
+app.get("/", (req, res) => {
+    res.json({
+        msg: "Running"
+    })
+})
 
 // SignIn -(BE Done -Tested) -(FE Done -Tested) -(bcrypted) -(DB done) -(JWT)
 app.post("/signin",async (req,res)=>{
@@ -107,6 +113,13 @@ app.post("/signin",async (req,res)=>{
     }
 
 })
+
+
+const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+
 
 // Middleware -(BE Done -Tested) -(FE Done -Tested) -(bcrypted) -(DB done) -(JWT)
 app.use((req,res,next)=>{
@@ -246,6 +259,8 @@ app.put("/completed/:id", async (req, res) => {
 });
 
 
+
+
 app.get("/fetchcontent",async (req,res)=>{
     // const {userId}=req.params;
     const {token}=req.headers;
@@ -269,8 +284,3 @@ app.get("/fetchcontent",async (req,res)=>{
     
 })
 
-
-const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
