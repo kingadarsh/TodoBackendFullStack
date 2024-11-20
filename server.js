@@ -85,8 +85,6 @@ app.post("/signin",async (req,res)=>{
             return res.json({
                 message:"No such user found"
             })
-        }else{
-            
         }
         const matchpassword=await bcrypt.compare(password,response.password);
 
