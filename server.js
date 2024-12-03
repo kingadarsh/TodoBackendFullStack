@@ -88,7 +88,7 @@ app.post("/signin",async (req,res)=>{
         }else{
             
         }
-        const matchpassword=await bcrypt.compare(password,response.password);
+        const matchpassword=await bcrypt.compare(password,response.password); //password authentication
 
         if(matchpassword){
             const token=jwt.sign({
