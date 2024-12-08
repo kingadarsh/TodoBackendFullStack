@@ -24,18 +24,6 @@ const app=express();
 // middleware
 app.use(express.json());
 app.use(cors());
-// app.use(cors({origin:true}));
-// const corsOptions = {
-//     origin: "*",
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-//     optionsSuccessStatus: 204
-//   };
-
-// app.use(cors(corsOptions));
-  
-// // Handle OPTIONS requests globally
-// app.options("*", cors(corsOptions));
   
 app.use(express.static("public"));
 
@@ -43,6 +31,23 @@ app.use(express.static("public"));
 
 // SignUp -(BE Done -Tested) -(FE Done -Tested) -(bcrypted) -(DB done)
 app.post("/signup",async (req,res)=>{
+
+    const requiredBody=z.object({
+        username:z.string().min(3).max(100),
+        name:z.string().min(3).max(100),
+        password:z.string().min(3).max(100)
+    })
+
+
+    const parsedDataWithSuccess=requiredBody.safeParse(req.body)
+
+    if(!parsedDataWithSuccess.success){
+        res.json({
+            message:"Incorrect Format. Check the inputs and try again.",
+            error:parsedDataWithSuccess.error
+        })
+        return;
+    }
     const {username,password,name}=req.body;
     const hashedpassword=await bcrypt.hash(password,5);
 
@@ -76,6 +81,22 @@ app.get("/", (req, res) => {
 
 // SignIn -(BE Done -Tested) -(FE Done -Tested) -(bcrypted) -(DB done) -(JWT)
 app.post("/signin",async (req,res)=>{
+    const requiredBody=z.object({
+        username:z.string().min(3).max(100),
+        name:z.string().min(3).max(100),
+        password:z.string().min(3).max(100)
+    })
+
+    const parsedDataWithSuccess=requiredBody.safeParse(req.body);
+
+    if(!parsedDataWithSuccess.success){
+        res.json({
+            message:"Incorrect Format. Check the inputs and try again.",
+            error:parsedDataWithSuccess.error
+        })
+        return;
+    }
+
     const {username,password}=req.body;
     try{
         const response= await UserModel.findOne({
