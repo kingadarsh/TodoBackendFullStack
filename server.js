@@ -77,32 +77,36 @@ app.post("/signin",async (req,res)=>{
                 message:"No such user found"
             })
         }
-        const matchpassword=await bcrypt.compare(password,response.password); //password authentication
+        else{
+            const matchpassword=await bcrypt.compare(password,response.password); //password authentication
 
-        if(matchpassword){
-            const token=jwt.sign({
-                userId:response._id
-            },process.env.JWT_SECRET);
+            if(matchpassword){
+                const token=jwt.sign({
+                    userId:response._id
+                },process.env.JWT_SECRET);
+    
+                return res.json({
+                    message:"You signed in successfully",
+                    token:token,
+                    response:response,
+                    username:username,
+                    password:password
+                })
+            }
+            else{
+                return res.status(401).json({
+                    message: "Incorrect password"
+                });
+            }
+        }
 
+        }
+        catch(err){
             return res.json({
-                message:"You signed in successfully",
-                token:token,
-                response:response,
-                username:username,
-                password:password
+                message:"Facing error Signing you in."
             })
         }
-        else{
-            return res.status(401).json({
-                message: "Incorrect password"
-            });
-        }
-    }
-    catch(err){
-        return res.json({
-            message:"Facing error Signing you in."
-        })
-    }
+
 
 })
 
